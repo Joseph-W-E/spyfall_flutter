@@ -1,0 +1,292 @@
+Airplane
+*Pilot
+*Mother with a baby
+*Stewardess
+*Rich passenger
+**Businessman
+*Air Marshall
+**Random passenger
+
+Bank
+*Janitor
+*Security personnel
+**Attendant
+*Attorney
+*Robber
+
+Beach
+*Old, nearly-naked man
+*Old, nearly-naked woman
+*Dog
+**Jock
+**Babe
+*Guy who kicks over sandcastles and plays loud music
+*Drunk guy
+*Drunk girl
+*Little Timmy
+*Little Suzy
+**Random person
+
+Cathedral
+*Pastor
+*Father David
+*Single mother
+**Random church-goer
+**Annoying child
+*Janitor
+*Organ player
+*Alter boy
+
+Circus Tent
+*Clown
+*Acrobatics
+*Juggler
+*Fire spitter
+*Manager
+*Lion tamer
+**Random circus-attendee
+*Motorcycle rider
+*Janitor
+*Concessions cashier
+*Entry cashier
+
+Corporate Party
+*Steve from Accounting
+*CEO
+*Project Manager
+*Janitor
+*Security
+*Carol (who drinks too much)
+*Shirley (who dresses inappropriately)
+**Random employee
+*Michael (works long hours)
+*Austin (only talks about work)
+
+Crusader Army
+*Raid leader
+**Random knight
+*Medic
+*Horse
+**Random archer
+*Drummer boy
+*Cook
+
+Casino
+*High risk gambler
+*The Boss
+*Low risk gambler
+**Random gambler
+*Drunk guy
+*Drunk girl
+*Security
+*Janitor
+
+Day Spa
+**Random employee
+*Manager
+*Janitor
+*Rich girl
+*The gay best friend (who is there reluctantly)
+*Front desk worker
+
+Embassy
+*Ambassador
+**Random worker
+*Security
+*US Marine visitor
+**Random visitor
+*Child in daycare
+*Janitor
+
+Hospital
+*Long-term patient
+*ER patient
+**Random patient
+*Doctor
+*Nurse
+*Janitor
+*Security
+*Front desk attendant
+*Ambulance driver
+
+Hotel
+*Front desk attendant
+*Manager
+*Maintenance Man
+*Vacationer
+**Random customer
+*Cook
+*House keeping
+*Accountant
+*Valet parker
+
+Military Base
+*General
+*Admiral
+*Medic
+**Random soldier
+*Pilot
+*Cook
+*Janitor
+*Security
+*US Marine
+
+Movie Studio
+**Random celebrity
+**Random actor
+**Random actress
+*Director
+*Producer
+**Random live audience member
+*Makeup artist
+*Costume manager
+*CGI guy
+*Tech guy
+
+Ocean Liner
+**Random rich passenger
+**Random passenger
+*Bartender
+*Captain
+**Random worker
+*Janitor
+*Head of enthusiasm
+*Photo-taker
+*Event manager
+
+Passenger Train
+**Random passenger
+*Conductor
+*Maintenance man
+**Random businessman
+*Ticket checker
+*Rail-controller
+
+Pirate Ship
+*Captain
+**Random pirate
+*Captain's bird
+*Drunk pirate
+*Damsel
+*Guy walking the plank
+*The Kraken
+*Peg-legged pirate
+
+Polar Station
+**Random researcher
+*Santa
+*Penguin
+*Polar bear
+
+Police Station
+*Police Chief
+**Random police officer
+**Random criminal
+*Front desk attendant
+
+Restaurant
+**Random waiter
+**Random waitress
+*Head chef
+*Cook
+*Rich customer
+*Begger
+*Rude customer
+*Manager
+*Accountant
+*Health Inspector
+*Gordon Ramsey
+
+School
+*Math teacher
+*English teacher
+*History teacher
+*Science teacher
+*Principal
+*Dean
+*Janitor
+*Lunch lady
+*Lunch guy
+*Special Education Professional
+**Random student
+*Football coach
+*Soccer coach
+*Baseball coach
+*Gym teacher
+*Security
+
+Service Station
+**Random mechanic
+*Biker
+*Spots-car driver
+*Supervisor
+*Joe Schmo (drivers a bad car)
+**Random customer
+*Front desk attendant
+
+Space Station
+**Random astronaut
+*Monkey
+*NASA control engineer
+**Random cosmonaut
+*Alien
+*Space monster
+
+Submarine
+*Captain
+**Random passenger
+*Researcher
+**Random engineer
+*Technician
+
+Supermarket
+**Random cashier
+**Random customer
+*Produce stocker
+*Dairy stocker
+*Meat stocker
+*Manager
+*Cook
+*Baker
+*Cart retriever
+*Accountant
+
+Theater
+*Lead actor
+*Lead actress
+**Random actor/actress
+*Guy (dressed as a tree)
+*Romeo
+*Juliet
+*Tech guy
+*Director
+*Producer
+*Rich attendee
+**Random attendee
+*Security
+
+University
+*Broke college student
+*Rich college student
+*Ivy league student
+*Professor
+*Janitor
+*Lecturer
+*Graduate student
+*Teaching Assistant
+*Librarian
+*Dining cook
+*Preacher
+*Club-goer
+*Recluse
+**Random student
+
+World War II Squad
+*Gunner
+*Medic
+*Drummer boy
+*General
+*Radio operator
+*Prisoner of war
+*Lt. Dan
+**Random infantry man
