@@ -215,7 +215,7 @@ School
 *Gym teacher
 *Security
 
-Service Station
+Car Shop
 **Random mechanic
 *Biker
 *Spots-car driver
