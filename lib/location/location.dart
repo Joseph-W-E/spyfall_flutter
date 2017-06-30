@@ -1,19 +1,18 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:async';
+import 'dart:math' as Math;
+
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:spyfall/utils/data_structures.dart';
 
 /// Handles scanning files to find (and supply) [Location] objects from files.
 class LocationManager {
-  /// Locations extracted from the file.
   RefreshableSet _locations = new RefreshableSet(true);
+  LocationInputFormat inputFormat;
 
-  /// How we determine what lines in a file belong to what.
-  LocationInputFormat locationInputFormat;
+  LocationManager(this.inputFormat);
 
-  LocationManager(this.locationInputFormat);
-
-  /// Returns a location that hasn't been chosen by this user
-  /// in (at least) X amount of rounds.
+  /// Gets a random location that hasn't been chosen in awhile
   Location get location => _locations.take;
 
   /// The file reader is looking for:
@@ -23,42 +22,44 @@ class LocationManager {
   /// Locations found are stored in [_locations].
   ///
   /// @param fileName - the file to be parsed
-  void parseFile({String fileName: 'package:spyfall/res/locations.txt'}) {
-    new File(fileName)
-        .openRead()
-        .transform(UTF8.decoder)
-        .transform(new LineSplitter())
-        .listen(_handleParseFileLineFound,
-            onDone: _handleParseFileDone, onError: _handleParseFileError);
-  }
+  Future parseFile({String fileName: 'assets/text/locations.txt'}) async {
+    String file = await _loadLocationsAsString(fileName);
+    Location location = new Location();
 
-  /// A hacky way of constructing [Location] objects.
-  /// This variable is only use for that purpose.
-  Location _locationToBuild;
+    for (String line in file.split("\n")) {
+      if (location == null) location = new Location();
 
-  /// When a line is read from a file, determine how to add it to a location.
-  void _handleParseFileLineFound(String line) {
-    if (locationInputFormat._isPotentiallyValidInput(line)) {
-      if (_locationToBuild == null)
-        _locationToBuild = new Location();
-      _locationToBuild.addLineType(locationInputFormat.getLineType(line), line);
-    } else {
-      if (_locationToBuild != null) {
-        _locations.add(_locationToBuild);
-        _locationToBuild = null;
+      if (inputFormat.isLocation(line)) {
+        location.location = _trim(line);
+      } else if (inputFormat.isSingleRole(line)) {
+        location.addSingleRole(_trim(line));
+      } else if (inputFormat.isMultiRole(line)) {
+        location.addMultiRole(_trim(line));
+      } else {
+        _locations.add(location);
+        location = null;
       }
     }
+
+    if (location != null) _locations.add(location);
+    _locations.refreshAfter = Math.min(5, _locations.all.length);
   }
 
-  void _handleParseFileDone() {}
+  /// Keeps only A-z, removes everything else.
+  String _trim(String line) {
+    return line.replaceAll(new RegExp(r"[^A-z0-9 ]"), '');
+  }
 
-  void _handleParseFileError() {}
+  /// Assumes the given path is a text-file-asset.
+  Future<String> _loadLocationsAsString(String path) async {
+    return await rootBundle.loadString(path);
+  }
 }
 
 /// Handles all information for a single location.
 class Location {
   /// The location the players are at.
-  String _location;
+  String location;
 
   /// The set of roles that only one play can have.
   RefreshableSet _singleRoles = new RefreshableSet(false);
@@ -68,24 +69,8 @@ class Location {
 
   Location();
 
-  String get location => _location;
   String get singleRole => _singleRoles.take;
   String get multiRole => _multiRoles.take;
-
-  bool addLineType(LocationLineType type, String line) {
-    switch (type) {
-      case LocationLineType.LOCATION:
-        _location = line;
-        break;
-      case LocationLineType.SINGLE_ROLE:
-        return addSingleRole(line);
-      case LocationLineType.MULTI_ROLE:
-        return addMultiRole(line);
-      case LocationLineType.NONE:
-        return false;
-    }
-    return true;
-  }
 
   /// Adds a found singleRole to the set of known singleRoles.
   ///
@@ -98,21 +83,25 @@ class Location {
   ///
   /// Returns true if successfully added the role, false otherwise.
   bool addMultiRole(String role) {
-    return _multiRoles.add(role);
+    bool success = _multiRoles.add(role);
+    if (success) _multiRoles.refreshAfter++;
+    return success;
   }
 
   /// Returns a [String] representation of all known roles for the location.
   String toString() {
     var buffer = new StringBuffer();
 
-    buffer.writeln("Location: $_location");
+    buffer.writeln("Location: $location");
+    buffer.writeln();
 
     buffer.writeln("Single Roles:");
     for (String role in _singleRoles.all) {
       buffer.writeln(role);
     }
+    buffer.writeln();
 
-    buffer.writeln("Multie Roles:");
+    buffer.writeln("Multi Roles:");
     for (String role in _multiRoles.all) {
       buffer.writeln(role);
     }
@@ -126,47 +115,27 @@ class Location {
 ///   single role
 ///   multi role
 class LocationInputFormat {
-  RegExp regExpLocation;
-  RegExp regExpSingleRole;
-  RegExp regExpMultiRole;
+  Pattern locationPattern;
+  Pattern singleRolePattern;
+  Pattern multiRolePattern;
 
-  LocationInputFormat(
-      this.regExpLocation, this.regExpSingleRole, this.regExpMultiRole);
+  LocationInputFormat(this.locationPattern, this.singleRolePattern, this.multiRolePattern);
 
-  /// It's a work of art.
-  LocationLineType getLineType(String line) => !_isPotentiallyValidInput(line)
-      ? LocationLineType.NONE
-      : _isLocation(line)
-          ? LocationLineType.LOCATION
-          : _isSingleRole(line)
-              ? LocationLineType.SINGLE_ROLE
-              : _isMultiRole(line)
-                  ? LocationLineType.MULTI_ROLE
-                  : LocationLineType.NONE;
+  /// This constructor forces the input to come as a string
+  LocationInputFormat.asRegExp(String locationRegex, String singleRoleRegex, String multiRoleRegex) {
+    locationPattern = new RegExp(locationRegex);
+    singleRolePattern = new RegExp(singleRoleRegex);
+    multiRolePattern = new RegExp(multiRoleRegex);
+  }
 
-  /// Evaluates to true if only the location regular expression matches.
-  bool _isLocation(String line) =>
-      regExpLocation.hasMatch(line) &&
-      !regExpSingleRole.hasMatch(line) &&
-      !regExpMultiRole.hasMatch(line);
+  bool isLocation(String line) => line.startsWith(locationPattern)
+      && !line.startsWith(singleRolePattern) && !line.startsWith(multiRolePattern);
 
-  /// Evaluates to true if only the single-role regular expression matches.
-  bool _isSingleRole(String line) =>
-      !regExpLocation.hasMatch(line) &&
-      regExpSingleRole.hasMatch(line) &&
-      !regExpMultiRole.hasMatch(line);
+  bool isSingleRole(String line) => !line.startsWith(locationPattern)
+      && line.startsWith(singleRolePattern) && !line.startsWith(multiRolePattern);
 
-  /// Evaluates to true if only the multi-role regular expression matches.
-  bool _isMultiRole(String line) =>
-      !regExpLocation.hasMatch(line) &&
-      !regExpSingleRole.hasMatch(line) &&
-      regExpMultiRole.hasMatch(line);
-
-  /// Evaluates to true if any regular expression matches.
-  bool _isPotentiallyValidInput(String line) =>
-      regExpLocation.hasMatch(line) ||
-      regExpSingleRole.hasMatch(line) ||
-      regExpMultiRole.hasMatch(line);
+  bool isMultiRole(String line) => !line.startsWith(locationPattern)
+      && !line.startsWith(singleRolePattern) && line.startsWith(multiRolePattern);
 }
 
 /// Enum to help dictate what types of lines the file parser has encountered.

@@ -1,6 +1,6 @@
 # spyfall
 
-A new flutter project.
+A fan-made, cross platform spyfall.
 
 ## Getting Started
 

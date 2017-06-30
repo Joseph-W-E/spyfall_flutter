@@ -1,0 +1,22 @@
+Airplane
+*Pilot
+*Mother with a baby
+*Stewardess
+*Rich passenger
+**Businessman
+*Air Marshall
+**Random passenger
+
+Bank
+*Janitor
+*Security personnel
+**Attendant
+*Attorney
+*Robber
+
+Beach
+**Jock
+**Babe
+*Little Timmy
+*Little Suzy
+**Random person

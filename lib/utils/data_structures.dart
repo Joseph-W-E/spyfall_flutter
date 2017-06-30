@@ -6,7 +6,7 @@ class RefreshableSet {
   bool refreshingEnabled;
 
   /// Used to determine when to refresh the set.
-  int _refreshAfter;
+  int refreshAfter;
   int _currentRefreshCount = 0;
 
   /// The set of items available for the user to take from.
@@ -15,7 +15,7 @@ class RefreshableSet {
   /// The set of items already taken from [_available].
   Set<dynamic> _taken = new Set();
 
-  RefreshableSet(this.refreshingEnabled, [this._refreshAfter]);
+  RefreshableSet(this.refreshingEnabled, {this.refreshAfter: 0});
 
   /// Adds an item to the [_available] data set.
   /// An item can only appear once in the union of [_available] and [_taken].
@@ -61,18 +61,6 @@ class RefreshableSet {
 
   /// Determines if the data set should refresh or not.
   bool _shouldRefresh() {
-    return refreshingEnabled ? _currentRefreshCount >= _refreshAfter : false;
+    return refreshingEnabled ? _currentRefreshCount >= refreshAfter : false;
   }
-}
-
-/// Used for testing purposes only.
-class ExposedRefreshableSet extends RefreshableSet {
-  ExposedRefreshableSet(bool refreshingEnabled, [int refreshAfter])
-      : super(refreshingEnabled, refreshAfter);
-
-  int get refreshAfter => _refreshAfter;
-  int get currentRefreshCount => _currentRefreshCount;
-  Set<dynamic> get available => _available;
-  Set<dynamic> get taken => _taken;
-  bool get shouldRefresh => _shouldRefresh();
 }
